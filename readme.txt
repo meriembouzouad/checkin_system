@@ -10,3 +10,5 @@ the code is written with nodejs and expressjs with mysql database
 3.get list of employees filtered by date ==> GET /api/get_employees/:date/
 4.checkin POST /api/check_in/:id
 5.checkout PUT '/api/check_out/:id
+
+documentation at localhost:3000/api-docs (not fully done)
