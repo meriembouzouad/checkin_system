@@ -13,19 +13,7 @@ var db=mysql.createConnection(
     database:'nodemysql'
     }
 )
-// create a table of employees 
-app.get('/create_emp_table',(req,res)=>{
-    let sql='create table employee (    employee_id INT AUTO_INCREMENT PRIMARY KEY, firstName VARCHAR(50),lastName VARCHAR(50),dateCreated DATE, departement VARCHAR(50))'
-       db.query(sql,(err,res)=>{
-        //table creation failed ==> throw an error
-            if (err) throw err;
-            //sucess creating employee table
-            console.log(res)
-       })
-       res.send('table created')
-       res.end()
-       
-})
+
 
 // check if the connection with mysql database is established
 db.connect((err)=>{
@@ -154,20 +142,7 @@ app.get('/api/get_employees/:date/', (req, res) => {
 
 
 
-// to control the checkin and check out we must create a table which makes connection between the employeeId and the checkin and checkout time
 
-app.get('/api/create_table_emp_control',(req,res)=>{
-
- const sql='create table employee_control (employee_id INT, FOREIGN KEY (employee_id) REFERENCES employee(employee_id),work_date date, checkin TIME, checkout TIME, comment VARCHAR(100),workTime TIME );'
- let query = db.query(sql, (err,result) => {
-    if (err) {
-       console.log(err)
-       res.status(500).send('cant create table'); // Send an error response
-    } else {
-res.status(200).send('create table')
-    }
-})
-});
 /**
  * POST /api/check_in/:id
  * @summary checkin endpoint 
@@ -277,5 +252,36 @@ time_diffe = new Date(current_date + " " + time_diff);
    });
 
 
+
+//to create databse table we can use this or just run sql command manually
+// to control the checkin and check out we must create a table which makes connection between the employeeId and the checkin and checkout time
+
+app.get('/api/create_table_emp_control',(req,res)=>{
+
+    const sql='create table employee_control (employee_id INT, FOREIGN KEY (employee_id) REFERENCES employee(employee_id),work_date date, checkin TIME, checkout TIME, comment VARCHAR(100),workTime TIME );'
+    let query = db.query(sql, (err,result) => {
+       if (err) {
+          console.log(err)
+          res.status(500).send('cant create table'); // Send an error response
+       } else {
+   res.status(200).send('create table')
+       }
+   })
+   });
+
+// create a table of employees 
+app.get('/create_emp_table',(req,res)=>{
+    let sql='create table employee (    employee_id INT AUTO_INCREMENT PRIMARY KEY, firstName VARCHAR(50),lastName VARCHAR(50),dateCreated DATE, departement VARCHAR(50))'
+       db.query(sql,(err,res)=>{
+        //table creation failed ==> throw an error
+            if (err) throw err;
+            //sucess creating employee table
+            console.log(res)
+       })
+       res.send('table created')
+       res.end()
+       
+})
+//listening at port 3000 ==> localhost:3000
 const port=process.env.PORT || 3000
 app.listen(port, ()=>console.log(`Listening on port 3000 ${port}`))
